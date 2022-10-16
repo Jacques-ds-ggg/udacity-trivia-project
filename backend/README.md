@@ -47,6 +47,7 @@ To run the server, execute:
 export FLASK_APP=flaskr
 export FLASK_ENV=development
 flask run --reload
+# Head back to frontend and run npm start to start the frontend on your local browser
 ```
 
 The `--reload` flag will detect file changes and restart the server automatically.
