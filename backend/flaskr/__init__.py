@@ -72,7 +72,6 @@ def create_app(test_config=None):
 
     def all_questions():
         try:
-            # page = request.args.get('page', 1, type = int)
             questions = Question.query.order_by(Question.id).paginate(page, QUESTIONS_PER_PAGE)
             current_questions = [question.format() for question in questions.items]
             data_dict = {
