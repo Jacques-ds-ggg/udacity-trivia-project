@@ -45,7 +45,7 @@ class TriviaTestCase(unittest.TestCase):
             "previous_questions": [20, 22],
             "quiz_category": {
                 "id": 3,
-                "type": "Biology"
+                "type": "Arts"
             }
 
         }
