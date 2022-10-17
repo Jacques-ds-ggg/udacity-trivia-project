@@ -30,7 +30,14 @@ def create_app(test_config=None):
     """
     @app.after_request
     def after_request(response):
-        response.headers.add('Access-Control-Allow-Headers','ContentType, Authentication, True','GET, UPDATE, DELETE, PUT, POST, OPTIONS')
+        response.headers.add(
+            'Access-Control-Allow-Headers',
+            'ContentType, Authentication, True'
+        )
+        response.headers.add(
+            'Access-Control-Allow-Methods',
+            'GET, UPDATE, DELETE, PUT, POST, OPTIONS'
+        )
         return response
 
     """
