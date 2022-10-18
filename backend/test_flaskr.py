@@ -29,8 +29,8 @@ class TriviaTestCase(unittest.TestCase):
 
             "question": "What is the colour of magic?",
             "answer": "Rainbow",
-            "category": 2,
-            "difficulty": 2
+            "category": "6",
+            "difficulty": 1
 
         }
 
@@ -98,29 +98,35 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(json_load["success"], True)
         self.assertTrue(json_load["question"]["id"] not in self.answers["previous_questions"])
 
-    def test_paginated(self):
-        quest = self.client().get("/questions")
-        json_load = json.loads(quest.data)
+    def test_get_paginated_questions(self):
+        quest = self.client().get('/questions')
+        quest = json.loads(quest.data)
 
         self.assertEqual(quest.status_code, 200)
-        self.assertEqual(json_load["success"], True)
-        self.assertTrue(len(json_load["questions"]) <= 10)
-        self.assertTrue(json_load["total_question"])
-        self.assertTrue(json_load["categories"])
+        self.assertEqual(quest['success'], True)
+        self.assertTrue(quest['total_questions'])
+        self.assertTrue(len(quest['questions']))
 
     def test_delete(self):
         quest = self.client().delete("/questions/4")
         json_load = json.loads(quest.data)
 
-        question = Question.query.filter(Question.id == 4)
+        question = Question.query.filter(
+                    Question.id == 4
+                )
 
         self.assertEqual(quest.status_code, 200)
-        self.assertEqual(json_load["success"], False)
+        self.assertEqual(json_load["success"], True)
         self.assertEqual(json_load["deleted"], 4)
+        self.assertTrue(json_load['total_questions'])
+        self.assertTrue(len(json_load['questions']))
+        question = Question.query.filter(
+                Question.id == 4
+            ).one_or_none()
         self.assertEqual(question, None)
 
     def test_404(self):
-        quest = self.client().get("/questions?page=200")
+        quest = self.client().get("/questions?page=1000")
         json_load = json.loads(quest.data)
 
         self.assertEqual(quest.status_code, 404)
