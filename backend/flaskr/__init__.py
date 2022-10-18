@@ -179,7 +179,11 @@ def create_app(test_config=None):
         search = json_req.get("searchTerm", None)
 
         try:
-            questions = Question.query.order_by(Question.id).filter(Question.question.ilike("%{}%".format(search))).paginate(page, QUESTIONS_PER_PAGE)
+            questions = Question.query.order_by(
+                        Question.id).filter(
+                            Question.question.ilike("%{}%".format(search))
+                        ).paginate(page, QUESTIONS_PER_PAGE)
+
             current_questions = [question.format() for question in questions.items]
             data_dict = {
                 'success': True,
@@ -269,5 +273,13 @@ def create_app(test_config=None):
     @app.errorhandler(422)
     def unable(error):
         return(jsonify({"success": False, "error": 422, "message": "unable to process"}),422,)
+
+    @app.errorhandler(400)
+    def unable(error):
+        return(jsonify({"success": False, "error": 400, "message": "bad request"}),400,)
+
+    @app.errorhandler(500)
+    def unable(error):
+        return(jsonify({"success": False, "error": 500, "message": "internal server error"}),500,)
 
     return app
